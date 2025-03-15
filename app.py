@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 
@@ -13,16 +14,14 @@ def calcular_multa(num_linhas, valor_por_linha, inicio, fim, cancelamento):
     valor_diario = valor_por_linha / 30  # Considerando cada mês com 30 dias fixos
     
     # Calcular os dias restantes no mês do cancelamento
-    ultimo_dia_mes_cancelamento = 30
-    dias_restantes_cancelamento = ultimo_dia_mes_cancelamento - data_cancelamento.day
+    dias_restantes_cancelamento = 30 - data_cancelamento.day  # Dias restantes no mês do cancelamento
     
     # Calcular os dias restantes no último mês do contrato
-    dias_restantes_final = data_fim.day  # Considera os dias do mês final
+    dias_restantes_final = data_fim.day  # Dias restantes no último mês do contrato
     
     # Calcular a quantidade de meses completos restantes no contrato
     meses_restantes = ((data_fim.year - data_cancelamento.year) * 12 + (data_fim.month - data_cancelamento.month)) - 1
-    if meses_restantes < 0:
-        meses_restantes = 0
+    meses_restantes = max(meses_restantes, 0)  # Evitar valores negativos
     
     # Calcular o valor da multa para os dias restantes
     valor_multa_dias = (dias_restantes_cancelamento + dias_restantes_final) * valor_diario * num_linhas * 0.30
@@ -59,4 +58,5 @@ def index():
     return render_template('index.html', resultado=resultado)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    PORT = os.getenv("PORT", 5000)  # Railway precisa definir a porta corretamente
+    app.run(host="0.0.0.0", port=int(PORT), debug=True)
