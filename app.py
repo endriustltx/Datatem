@@ -58,5 +58,5 @@ def index():
     return render_template('index.html', resultado=resultado)
 
 if __name__ == '__main__':
-    PORT = os.getenv("PORT", 5000)  # Railway precisa definir a porta corretamente
+    PORT = os.getenv("PORT", "8080")  # Railway precisa definir a porta corretamente
     app.run(host="0.0.0.0", port=int(PORT), debug=True)
