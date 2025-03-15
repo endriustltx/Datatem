@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Multa</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 50%; margin: auto; }
+        input, button { margin: 5px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Multa</h1>
+        <form method="post">
+            <label for="valor_por_linha">Valor por Linha (R$):</label>
+            <input type="number" id="valor_por_linha" name="valor_por_linha" step="0.01" required><br>
+            
+            <label for="num_linhas">Quantidade de Linhas:</label>
+            <input type="number" id="num_linhas" name="num_linhas" required><br>
+            
+            <label for="inicio">Data de Início:</label>
+            <input type="date" id="inicio" name="inicio" required><br>
+            
+            <label for="fim">Data de Fim:</label>
+            <input type="date" id="fim" name="fim" required><br>
+            
+            <label for="cancelamento">Data de Cancelamento:</label>
+            <input type="date" id="cancelamento" name="cancelamento" required><br>
+            
+            <button type="submit">Calcular</button>
+        </form>
+        
+        {% if resultado %}
+            <h2>Resultados</h2>
+            <p>Meses Restantes: {{ resultado.get('meses_restantes', 'N/A') }}</p>
+            <p>Dias Restantes no Mês de Cancelamento: {{ resultado.get('dias_restantes_cancelamento', 'N/A') }}</p>
+            <p>Dias Restantes no Último Mês do Contrato: {{ resultado.get('dias_restantes_final', 'N/A') }}</p>
+            <p>Multa pelos Dias Restantes: R$ {{ resultado.get('valor_multa_dias', 'N/A') }}</p>
+            <p>Multa pelos Meses Restantes: R$ {{ resultado.get('valor_multa_meses', 'N/A') }}</p>
+            <p>Multa Total: R$ {{ resultado.get('multa', 'N/A') }}</p>
+            <p>Data de Cancelamento: {{ resultado.get('data_cancelamento', 'N/A') }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
